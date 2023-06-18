@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "listing-app"
+version = "0.1.0"
+description = ""
+authors = ["Sergei Eremkin <ffr@list.ru>"]
+readme = "README.md"
+packages = [{include = "listing_app"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.97.0"}
+sqlalchemy = "^2.0.16"
+alembic = "^1.11.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

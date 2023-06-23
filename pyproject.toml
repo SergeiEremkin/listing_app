@@ -11,6 +11,7 @@ python = "^3.10"
 fastapi = {extras = ["all"], version = "^0.97.0"}
 sqlalchemy = "^2.0.16"
 alembic = "^1.11.1"
+beautifulsoup4 = "^4.12.2"
 
 
 [build-system]

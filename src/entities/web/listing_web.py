@@ -6,6 +6,7 @@ class ListingBase(BaseModel):
     description: str | None = None
 
 
+
 class ListingCreate(ListingBase):
     pass
 
@@ -13,6 +14,7 @@ class ListingCreate(ListingBase):
 class Listing(ListingBase):
     id: int
     user_id: int
+    url: str
 
     class Config:
         orm_mode = True

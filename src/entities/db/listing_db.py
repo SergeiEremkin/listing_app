@@ -1,6 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-
 from src.repositories.postgres.database import Base
 
 
@@ -9,6 +8,7 @@ class Listing(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     title = Column(String, index=True)
+    url = Column(String, nullable=False , unique=False)
     description = Column(String, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
 

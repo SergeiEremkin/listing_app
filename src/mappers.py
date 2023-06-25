@@ -8,7 +8,7 @@ def parse_frogs(url: str) -> list[str]:
     all_links = []
     response = requests.get(url)
     response.raise_for_status()
-    soup = BeautifulSoup(response.text, "lxml")
+    soup = BeautifulSoup(response.text, "html.parser")
     # print(soup.prettify())
     frogs_imgs = soup.findAll('script')
     links = str(frogs_imgs).split('\n')

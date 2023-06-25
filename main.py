@@ -1,14 +1,19 @@
-from fastapi import Depends, FastAPI, HTTPException
+import time
+
+from fastapi import Depends, FastAPI, HTTPException, Request
 from sqlalchemy.orm import Session
 from src.services import crud
 from src.entities.db import user_db, listing_db
 from src.entities.web import listing_web, user_web
 from src.repositories.postgres.database import SessionLocal, engine
-from src.mappers import parse_frogs
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
 user_db.Base.metadata.create_all(bind=engine)
 listing_db.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+templates = Jinja2Templates(directory="src/templates")
 
 
 # Dependency
@@ -20,10 +25,9 @@ async def get_db():
         db.close()
 
 
-@app.get("/")
-def show_frogs():
-    img_urls = parse_frogs('http://allaboutfrogs.org/funstuff/randomfrog.html')
-    return img_urls
+@app.get("/", response_model=user_web.Listing)
+def create_random_listing(db: Session = Depends(get_db), user_id: int = 1):
+    return crud.listing_random_generate(db=db, user_id=user_id)
 
 
 @app.post("/users/", response_model=user_web.User)
@@ -55,7 +59,7 @@ async def create_item_for_user(
     return crud.create_user_listing(db=db, listing_validation=listing, user_id=user_id)
 
 
-@app.get("/items/", response_model=list[listing_web.Listing])
-async def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@app.get("/items/", response_model=list[listing_web.Listing], response_class=HTMLResponse)
+async def read_items(request: Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = crud.get_listings(db, skip=skip, limit=limit)
-    return items
+    return templates.TemplateResponse("item.html", {"request": request, "items": items})

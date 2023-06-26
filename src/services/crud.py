@@ -1,10 +1,13 @@
-import random
+from fastapi import Depends
+
+from src.dependencies import get_db
 
 from sqlalchemy.orm import Session
-
+from sqlalchemy import func
 from src.entities.db import listing_db, user_db
 from src.entities.web import listing_web, user_web
-from src.mappers import parse_frogs
+from src.mappers.parser import cron
+from random import randint
 
 
 def get_user(db: Session, user_id: int):
@@ -33,7 +36,7 @@ def get_listings(db: Session, skip: int = 0, limit: int = 100):
 
 
 def create_user_listing(db: Session, listing_validation: listing_web.ListingCreate, user_id: int):
-    frog_url = _generate_random_url()
+    frog_url = cron(2)
     db_listing = listing_db.Listing(**listing_validation.dict(), url=frog_url, user_id=user_id)
     db.add(db_listing)
     db.commit()
@@ -41,9 +44,12 @@ def create_user_listing(db: Session, listing_validation: listing_web.ListingCrea
     return db_listing
 
 
-def listing_random_generate(db: Session, user_id: int = 1):
-    frog_url = _generate_random_url()
-    rnd_num = _generate_random_number()
+def create_random_user_listing(db: Session, user_id: int = 1):
+    MIN_NUM = 0
+    MAX_NUM = 100
+    TIMER = 2
+    frog_url = cron(TIMER)
+    rnd_num = randint(MIN_NUM, MAX_NUM)
     db_listing = listing_db.Listing(title=f'title{rnd_num}', description=f'description{rnd_num}',
                                     url=frog_url, user_id=user_id)
     db.add(db_listing)
@@ -52,13 +58,9 @@ def listing_random_generate(db: Session, user_id: int = 1):
     return db_listing
 
 
-def _generate_random_url() -> str:
-    frogs_urls = parse_frogs('http://allaboutfrogs.org/funstuff/randomfrog.html')
-    rnd_num = random.randint(0, len(frogs_urls))
-    return frogs_urls[rnd_num]
+def get_users_id(db: Session):
+    user_id = db.query(user_db.User.id)
+    print(user_id)
 
-
-def _generate_random_number() -> int:
-    MIN = 0
-    MAX = 100
-    return random.randint(MIN, MAX)
+if __name__ == '__main__':
+    get_users_id(db=Depends(get_db))

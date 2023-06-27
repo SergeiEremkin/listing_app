@@ -9,10 +9,9 @@
 </head>
 <body>
 {%for listing in listings%}
-<li>{{listing.id}}</li>
-<li>{{listing.title}}</li>
-<li>{{listing.description}}</li>
-<li><img src={{listing.url}} alt="Картинка лягушки"></li>
+<h1>{{listing.id}} {{listing.title}}</h1>
+<p>{{listing.description}}</p>
+<img src={{listing.url}} alt="Картинка лягушки">
 {%endfor%}
 
 </body>

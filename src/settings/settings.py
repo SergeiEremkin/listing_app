@@ -1,12 +1,13 @@
-import os
+from pydantic import BaseSettings
 
-from dotenv import load_dotenv
 
-load_dotenv()
+class Settings(BaseSettings):
+    db_username: str = 'postgres'
+    db_password: str = 'postgres'
+    db_database: str = 'postgres'
+    db_host: str = 'localhost'
+    db_port: int = 5432
+    url_site: str = 'http://allaboutfrogs.org/funstuff/randomfrog.html'
 
-DB_USERNAME = os.getenv("DB_USERNAME")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-DB_DATABASE = os.getenv("DB_DATABASE")
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = os.getenv("DB_PORT")
-URL_SITE = os.getenv("URL_SITE")
+    class Config:
+        env_file = ".env"

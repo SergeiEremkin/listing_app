@@ -1,13 +1,16 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from src.settings.settings import Settings
 
-import os
-from dotenv import load_dotenv
-from src.settings.settings import DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_DATABASE
+settings = Settings()
 
-#f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}"
-SQLALCHEMY_DATABASE_URL = f"postgresql://postgres:postgres@localhost:5432/postgres"
+SQLALCHEMY_DATABASE_URL = f"postgresql://" \
+                          f"{settings.db_username}:" \
+                          f"{settings.db_password}@" \
+                          f"{settings.db_host}:" \
+                          f"{settings.db_port}/" \
+                          f"{settings.db_database}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL

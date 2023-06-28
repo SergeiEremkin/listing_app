@@ -8,6 +8,9 @@ from src.mappers.parser import links_parser
 from src.services import crud
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from src.settings.settings import Settings
+
+settings = Settings()
 
 router = APIRouter(
     prefix="/listings",
@@ -20,7 +23,7 @@ templates = Jinja2Templates(directory="src/templates")
 
 @router.post("/random", response_model=user_web.Listing)
 async def create_random_listing(db=Depends(get_db), user_id: int = 1):
-    p = links_parser('http://allaboutfrogs.org/funstuff/randomfrog.html')
+    p = links_parser(settings.url_site)
     while True:
         url: str = next(p)
         await crud.create_random_user_listing(db=db, user_id=user_id, url=url)

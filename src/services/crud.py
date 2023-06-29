@@ -1,13 +1,10 @@
-from fastapi import Depends
-
-from src.dependencies import get_db
 
 from sqlalchemy.orm import Session
-from sqlalchemy import func
 from src.entities.db import listing_db, user_db
 from src.entities.web import listing_web, user_web
 from src.mappers.parser import links_parser
 from random import randint
+from src.routers.listings import settings
 
 
 async def get_user(db: Session, user_id: int):
@@ -36,7 +33,7 @@ async def get_listings(db: Session, skip: int = 0, limit: int = 100):
 
 
 async def create_user_listing(db: Session, listing_validation: listing_web.ListingCreate, user_id: int):
-    p = links_parser('http://allaboutfrogs.org/funstuff/randomfrog.html')
+    p = links_parser(settings.url_site)
     db_listing = listing_db.Listing(**listing_validation.dict(), url=next(p), user_id=user_id)
     db.add(db_listing)
     db.commit()
@@ -54,3 +51,5 @@ async def create_random_user_listing(db: Session, url: str, user_id: int = 1):
     db.commit()
     db.refresh(db_listing)
     return db_listing
+
+

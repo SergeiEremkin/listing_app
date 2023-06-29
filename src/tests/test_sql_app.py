@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import pytest
 import httpx
 from main import app
 from src.dependencies import get_db
@@ -39,22 +40,21 @@ client = TestClient(app)
 def test_create_user():
     response = client.post(
         "/users/",
-        json={"name": "Игорь", "email": "2333@mail.ru", "hashed_password": "my_pass"}
+        json={"name": "Игорь", "email": "8888@mail.ru", "hashed_password": "my_pass"}
     )
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["email"] == "2333@mail.ru"
+    assert data["email"] == "8888@mail.ru"
     assert "id" in data
     user_id = data["id"]
 
     response = client.get(f"/users/{user_id}")
     assert response.status_code == 200, response.text
     data = response.json()
-    assert data["email"] == "2333@mail.ru"
+    assert data["email"] == "8888@mail.ru"
     assert data["id"] == user_id
 
 
 if __name__ == '__main__':
-    test_create_user()
-    # print(DB_USERNAME)
-    # print(DB_PORT)
+    pytest.main(['-v'])
+

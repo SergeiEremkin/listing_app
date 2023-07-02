@@ -18,6 +18,8 @@ requests = "^2.31.0"
 bs4 = "^0.0.1"
 httpx = "^0.24.1"
 pytest = "^7.4.0"
+mypy = "^1.4.1"
+asyncpg = "^0.27.0"
 
 
 [build-system]

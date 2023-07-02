@@ -12,4 +12,4 @@ class Listing(Base):
     description = Column(String, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
 
-    user = relationship("User", back_populates="listings")
+    user = relationship("User", back_populates="listings", lazy='select')

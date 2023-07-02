@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import get_db
-from src.entities.web import user_web, listing_web
-from src.services import crud
+from src.entities.web.user import User, CreateUser
+from src.services.users import get_users_service, create_user_service, get_user_by_id_service
 
 router = APIRouter(
     prefix="/users",
@@ -11,23 +11,19 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=user_web.User)
-async def create_user(user_validation: user_web.UserCreate, db=Depends(get_db)):
-    db_user = await crud.get_user_by_email(db, email=user_validation.email)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    return await crud.create_user(db=db, user_validation=user_validation)
+@router.post("/", response_model=CreateUser)
+async def create_user(user_validation: CreateUser, db=Depends(get_db)):
+    return await create_user_service(db, user_validation)
 
 
-@router.get("/", response_model=list[user_web.User])
+@router.get("/", response_model=list[User])
 async def read_users(skip: int = 0, limit: int = 100, db=Depends(get_db)):
-    users = await crud.get_users(db, skip=skip, limit=limit)
-    return users
+    return await get_users_service(db, skip=skip, limit=limit)
 
 
-@router.get("/{user_id}", response_model=user_web.User)
+@router.get("/{user_id}", response_model=User)
 async def read_user(user_id: int, db=Depends(get_db)):
-    db_user = await crud.get_user(db, user_id=user_id)
+    db_user = await get_user_by_id_service(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user

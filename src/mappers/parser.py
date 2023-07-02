@@ -1,20 +1,31 @@
-import time
-from typing import Generator
-
+import asyncio
+from random import randint
+from typing import AsyncGenerator
+import httpx
+from httpx import AsyncClient
 from bs4 import BeautifulSoup
-import requests
+from src.settings import Settings
+
+settings = Settings()
 
 
-def links_parser(url: str) -> Generator:
+async def image_parser(url: str) -> list[str]:
     HTTP = 'http://'
     FORMAT = '.jpg'
-    response = requests.get(url)
+    formated_image = []
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
-    frogs_imgs = soup.findAll('script')
-    links = str(frogs_imgs).split('\n')
-    for link in links:
-        if HTTP in link and FORMAT in link:
-            yield link.replace('\r', '').replace('"', '').replace(',', '').strip()
+    images = str(soup.findAll('script')).split('\n')
+    for image in images:
+        if HTTP in image and FORMAT in image:
+            formated_image.append(image.replace('\r', '').replace('"', '').replace(',', '').strip())
+    return formated_image
 
 
+async def image_gen(images: list[str]) -> AsyncGenerator:
+    yield images[randint(0, len(images) - 1)]
 
+
+if __name__ == '__main__':
+    pass

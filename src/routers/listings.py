@@ -1,14 +1,12 @@
 import asyncio
 
-from fastapi import APIRouter, Depends, \
-    Request
+from fastapi import APIRouter, Depends, Request
 from src.dependencies import get_db
-from src.entities.web import user_web, listing_web
-from src.mappers.parser import links_parser
-from src.services import crud
+from src.entities.web.listing import Listing, CreateListing
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from src.settings.settings import Settings
+from src.services.listings import create_user_listing_service, get_listings, create_random_user_listing
 
 settings = Settings()
 
@@ -21,24 +19,20 @@ router = APIRouter(
 templates = Jinja2Templates(directory="src/templates")
 
 
-@router.post("/random", response_model=user_web.Listing)
-async def create_random_listing(db=Depends(get_db), user_id: int = 1):
-    p = links_parser(settings.url_site)
+@router.post("/{user_id}/random", response_model=CreateListing)
+async def create_random_listing(user_id: int, db=Depends(get_db)):
     while True:
-        url: str = next(p)
-        await crud.create_random_user_listing(db=db, user_id=user_id, url=url)
+        await create_random_user_listing(db, user_id=user_id)
         await asyncio.sleep(10)
 
 
-@router.post("/{user_id}/items/", response_model=listing_web.Listing)
-async def create_item_for_user(
-        user_id: int, listing: listing_web.ListingCreate, db=Depends(get_db)
-):
-    return await crud.create_user_listing(db=db, listing_validation=listing, user_id=user_id)
+@router.post("/{user_id}/listing/", response_model=CreateListing)
+async def create_listing_for_user(
+        user_id: int, listing_validation: CreateListing, db=Depends(get_db)):
+    return await create_user_listing_service(db, listing_validation, user_id)
 
 
-@router.get("/", response_model=listing_web.Listing, response_class=HTMLResponse)
-async def read_items(request: Request, skip: int = 0, limit: int = 100, db=Depends(get_db)):
-    listings = await crud.get_listings(db, skip=skip, limit=limit)
+@router.get("/", response_model=list[Listing], response_class=HTMLResponse)
+async def read_listings(request: Request, skip: int = 0, limit: int = 100, db=Depends(get_db)):
+    listings = await get_listings(db, skip=skip, limit=limit)
     return templates.TemplateResponse("listing.html", {"request": request, "listings": listings})
-

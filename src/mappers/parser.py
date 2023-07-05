@@ -1,8 +1,6 @@
-import asyncio
 from random import randint
 from typing import AsyncGenerator
 import httpx
-from httpx import AsyncClient
 from bs4 import BeautifulSoup
 from src.settings import Settings
 

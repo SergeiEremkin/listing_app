@@ -1,10 +1,7 @@
 import asyncio
 from random import randint
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
-
 from src.repositories.postgres.pg_tables.listing import Listing
 from src.mappers.parser import image_parser, image_gen
 from src.entities.web import listing
@@ -18,7 +15,8 @@ async def get_listings(session: AsyncSession, skip: int = 0, limit: int = 100):
     return db_listings.scalars().all()
 
 
-async def create_user_listing_service(session: AsyncSession, listing_validation: listing.CreateListing, user_id: int):
+async def create_user_listing_service(session: AsyncSession, listing_validation: listing.CreateListing,
+                                      user_id: int) -> Listing:
     p = await asyncio.create_task(image_parser(settings.url_site))
     image = image_gen(p)
     db_listing = Listing(title=listing_validation.title,
@@ -30,7 +28,7 @@ async def create_user_listing_service(session: AsyncSession, listing_validation:
     return db_listing
 
 
-async def create_random_user_listing(session: AsyncSession, user_id: int = 1):
+async def create_random_user_listing(session: AsyncSession, user_id: int = 1) -> Listing:
     MIN_NUM = 0
     MAX_NUM = 100
     rnd_num = randint(MIN_NUM, MAX_NUM)

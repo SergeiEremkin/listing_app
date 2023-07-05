@@ -24,7 +24,7 @@ async def get_users_service(session: AsyncSession, skip: int = 0, limit: int = 1
     return result.scalars().all()
 
 
-async def create_user_service(db: AsyncSession, user_validation: CreateUser):
+async def create_user_service(db: AsyncSession, user_validation: CreateUser) -> User:
     db_user = User(name=user_validation.name, email=user_validation.email,
                    hashed_password=user_validation.hashed_password)
     db.add(db_user)

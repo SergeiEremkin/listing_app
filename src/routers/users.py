@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import get_db
 from src.entities.web.user import User, CreateUser
-from src.repositories.postgres.services.users import get_users_service, create_user_service, get_user_by_id_service
+from src.services.users import get_users_service, create_user_service, get_user_by_id_service
 
 router = APIRouter(
     prefix="/users",

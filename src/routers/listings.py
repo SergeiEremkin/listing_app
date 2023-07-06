@@ -6,7 +6,7 @@ from src.entities.web.listing import Listing, CreateListing
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from src.settings.settings import Settings
-from src.repositories.postgres.services.listings import create_user_listing_service, get_listings, create_random_user_listing
+from src.services.listings import create_user_listing_service, get_listings_service, create_random_user_listing_service
 
 settings = Settings()
 
@@ -22,7 +22,7 @@ templates = Jinja2Templates(directory="src/templates")
 @router.post("/{user_id}/random", response_model=CreateListing)
 async def create_random_listing(user_id: int, db=Depends(get_db)):
     while True:
-        await create_random_user_listing(db, user_id=user_id)
+        await create_random_user_listing_service(db, user_id=user_id)
         await asyncio.sleep(10)
 
 
@@ -34,5 +34,5 @@ async def create_listing_for_user(
 
 @router.get("/", response_model=list[Listing], response_class=HTMLResponse)
 async def read_listings(request: Request, skip: int = 0, limit: int = 100, db=Depends(get_db)):
-    listings = await get_listings(db, skip=skip, limit=limit)
+    listings = await get_listings_service(db, skip=skip, limit=limit)
     return templates.TemplateResponse("listing.html", {"request": request, "listings": listings})

@@ -5,6 +5,7 @@ from sqlalchemy.orm import selectinload
 
 from src.repositories.postgres.pg_tables.user import User
 from src.entities.web.user import CreateUser
+from src.repositories.postgres.users import add_user
 
 
 async def get_user_by_id_service(session: AsyncSession, user_id: int):
@@ -24,10 +25,8 @@ async def get_users_service(session: AsyncSession, skip: int = 0, limit: int = 1
     return result.scalars().all()
 
 
-async def create_user_service(db: AsyncSession, user_validation: CreateUser) -> User:
+async def create_user_service(session: AsyncSession, user_validation: CreateUser) -> User:
     db_user = User(name=user_validation.name, email=user_validation.email,
                    hashed_password=user_validation.hashed_password)
-    db.add(db_user)
-    await db.commit()
-    await db.refresh(db_user)
+    await add_user(session, db_user)
     return db_user

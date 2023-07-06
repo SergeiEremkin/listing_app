@@ -6,7 +6,7 @@ from src.entities.web.listing import Listing, CreateListing
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from src.settings.settings import Settings
-from src.services.listings import create_user_listing_service, get_listings, create_random_user_listing
+from src.repositories.postgres.services.listings import create_user_listing_service, get_listings, create_random_user_listing
 
 settings = Settings()
 

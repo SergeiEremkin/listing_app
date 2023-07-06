@@ -4,7 +4,7 @@ from httpx import AsyncClient
 
 from main import app
 from src.entities.web.user import CreateUser
-from src.services.users import create_user_service
+from src.repositories.postgres.services.users import create_user_service
 from src.tests.conftest_db import override_get_db, init_models, test_app
 
 

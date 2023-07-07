@@ -1,10 +1,12 @@
+import asyncio
+
 from fastapi import Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-
+from src.dependencies import get_db
 from src.repositories.postgres.pg_tables.user import User
-from src.entities.web.user import CreateUser
+from src.entities.web import user
 from src.repositories.postgres.users import add_user
 
 
@@ -25,7 +27,7 @@ async def get_users_service(session: AsyncSession, skip: int = 0, limit: int = 1
     return result.scalars().all()
 
 
-async def create_user_service(session: AsyncSession, user_validation: CreateUser) -> User:
+async def create_user_service(session: AsyncSession, user_validation: user.CreateUser) -> User:
     db_user = User(name=user_validation.name, email=user_validation.email,
                    hashed_password=user_validation.hashed_password)
     await add_user(session, db_user)

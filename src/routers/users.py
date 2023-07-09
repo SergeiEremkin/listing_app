@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import get_db
 from src.entities.web.user import User, CreateUser
-from src.services.users import get_users_service, create_user_service, get_user_by_id_service
+from src.services.users import get_users_service, create_user_service, get_user_by_id_service, get_user_by_email_service
 
 router = APIRouter(
     prefix="/users",
@@ -27,3 +27,8 @@ async def read_user(user_id: int, db=Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+
+@router.get("/{email}")
+async def read_user_by_email(email: str, db=Depends(get_db)):
+    db_user = await get_user_by_email_service(db, email=email)

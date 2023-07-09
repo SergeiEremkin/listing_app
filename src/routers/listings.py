@@ -19,20 +19,20 @@ router = APIRouter(
 templates = Jinja2Templates(directory="src/templates")
 
 
-@router.post("/{user_id}/random", response_model=CreateListing)
+@router.post("/{user_id}/random")
 async def create_random_listing(user_id: int, db=Depends(get_db)):
     while True:
         await create_random_user_listing_service(db, user_id=user_id)
         await asyncio.sleep(10)
 
 
-@router.post("/{user_id}/listing/", response_model=CreateListing)
+@router.post("/{user_id}/listing/")
 async def create_listing_for_user(
         user_id: int, listing_validation: CreateListing, db=Depends(get_db)):
     return await create_user_listing_service(db, listing_validation, user_id)
 
 
-@router.get("/", response_model=list[Listing], response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse)
 async def read_listings(request: Request, skip: int = 0, limit: int = 100, db=Depends(get_db)):
     listings = await get_listings_service(db, skip=skip, limit=limit)
     return templates.TemplateResponse("listing.html", {"request": request, "listings": listings})

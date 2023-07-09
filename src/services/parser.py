@@ -7,7 +7,7 @@ from src.settings import Settings
 settings = Settings()
 
 
-async def image_parser(url: str) -> list[str]:
+async def _image_parser(url: str) -> list[str]:
     HTTP = 'http://'
     FORMAT = '.jpg'
     formated_image = []
@@ -21,8 +21,15 @@ async def image_parser(url: str) -> list[str]:
     return formated_image
 
 
-async def image_gen(images: list[str]) -> AsyncGenerator:
+async def image_generator() -> AsyncGenerator:
+    images = await _image_parser(settings.url_site)
     yield images[randint(0, len(images) - 1)]
+
+
+async def random_number() -> int:
+    MIN_NUM = 0
+    MAX_NUM = 100
+    return randint(MIN_NUM, MAX_NUM)
 
 
 if __name__ == '__main__':

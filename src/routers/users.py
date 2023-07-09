@@ -11,17 +11,17 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=CreateUser)
+@router.post("/")
 async def create_user(user_validation: CreateUser, db=Depends(get_db)):
     return await create_user_service(db, user_validation)
 
 
-@router.get("/", response_model=list[User])
+@router.get("/")
 async def read_users(skip: int = 0, limit: int = 100, db=Depends(get_db)):
     return await get_users_service(db, skip=skip, limit=limit)
 
 
-@router.get("/{user_id}", response_model=User)
+@router.get("/{user_id}")
 async def read_user(user_id: int, db=Depends(get_db)):
     db_user = await get_user_by_id_service(db, user_id=user_id)
     if db_user is None:

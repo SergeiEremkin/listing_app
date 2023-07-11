@@ -19,18 +19,11 @@ from src.settings import Settings
 settings = Settings()
 
 TEST_SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://" \
-                               f"{settings.test_db_username}:" \
-                               f"{settings.test_db_password}@" \
+                               f"{settings.db_username}:" \
+                               f"{settings.db_password}@" \
                                f"{settings.db_host}:" \
                                f"{settings.db_port}/" \
                                f"{settings.test_db_database}"
-
-SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://" \
-                          f"{settings.db_username}:" \
-                          f"{settings.db_password}@" \
-                          f"{settings.db_host}:" \
-                          f"{settings.db_port}/" \
-                          f"{settings.db_database}"
 
 
 @pytest.fixture(scope="session")
@@ -57,15 +50,6 @@ async def prepare_db():
     async with create_db_engine.begin() as connection:
         await connection.run_sync(Base.metadata.drop_all)
         await connection.run_sync(Base.metadata.create_all)
-        # await connection.execute(text(
-        #     f"DROP DATABASE IF EXISTS {settings.test_db_database};"
-        #
-        # )
-        #
-        # )
-        # await connection.execute(
-        #     text(f"CREATE DATABASE {settings.test_db_database};")
-        # )
 
 
 @pytest_asyncio.fixture(scope="session")

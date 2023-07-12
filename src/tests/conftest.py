@@ -1,18 +1,17 @@
 import asyncio
-
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from sqlalchemy import text, NullPool
 from sqlalchemy.orm import sessionmaker
-
 from src.dependencies import get_db
 from main import app
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-
+from src.entities.web.listing import CreateListing
 from src.entities.web.user import CreateUser
 from src.repositories.postgres.database import Base
-from src.repositories.postgres.pg_tables.user import User
+from src.repositories.postgres.pg_tables import listing
+from src.repositories.postgres.pg_tables import user
+from src.services.listings import create_user_listing_service
 from src.services.users import create_user_service
 from src.settings import Settings
 
@@ -64,8 +63,6 @@ async def db_session(engine) -> AsyncSession:
         )
         async with TestingSessionLocal(bind=connection) as session:
             yield session
-            # await session.flush()
-            # await session.rollback()
 
 
 @pytest.fixture(scope="session")
@@ -84,9 +81,21 @@ async def async_client(override_get_db):
 
 
 @pytest_asyncio.fixture
-async def user(db_session: AsyncSession) -> User:
+async def user(db_session: AsyncSession) -> user.User:
     user = CreateUser(email="nanny_ogg@lancre.com", name="Gytha Ogg", hashed_password="12345678")
     user_db = await create_user_service(db_session, user)
     yield user_db
     await db_session.delete(user_db)
+    await db_session.commit()
+
+
+@pytest_asyncio.fixture()
+async def listings(db_session: AsyncSession, user) -> list[listing.Listing]:
+    listing_1 = CreateListing(title="test_title", description="description_test")
+    listing_2 = CreateListing(title="test_title_2", description="description_test_2")
+    listing_db_1 = await create_user_listing_service(db_session, listing_1, user_id=user.id)
+    listing_db_2 = await create_user_listing_service(db_session, listing_2, user_id=user.id)
+    yield [listing_db_1, listing_db_2]
+    await db_session.delete(listing_db_1)
+    await db_session.delete(listing_db_2)
     await db_session.commit()

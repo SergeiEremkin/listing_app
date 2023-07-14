@@ -1,0 +1,30 @@
+version: "1.1"
+services:
+  db:
+    image: postgres:15.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres_db
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - ".postgres-data:/var/lib/postgresql/data:delegated"
+  web:
+    build: .
+    environment:
+      - POSTGRES_DATABASE_URL=postgresql+asyncpg://postgres:postgres@db/postgres
+      - SQLALCHEMY_DATABASE_URL=postgresql+asyncpg://postgres:postgres@db/postgres_db
+      - SYNC_SQLALCHEMY_DATABASE_URL=postgresql://root:root@db/appdb
+      - TEST_SQLALCHEMY_DATABASE_URL=postgresql+asyncpg://root:root@db/testdb
+      - CELERY_BROKER_URL=pyamqp://guest@rabbitmq//
+      - TEST_DB_NAME=testdb
+      - WAIT_HOSTS=db:5432
+    volumes:
+      - .:/listing_app
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - db

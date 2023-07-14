@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Sergei Eremkin <ffr@list.ru>"]
 readme = "README.md"
-packages = [{include = "listing_app"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -22,6 +22,8 @@ mypy = "^1.4.1"
 asyncpg = "^0.27.0"
 types-beautifulsoup4 = "^4.12.0.5"
 pytest-asyncio = "^0.21.0"
+ruff = "^0.0.278"
+psycopg2-binary = "^2.9.6"
 
 
 [build-system]

@@ -1,5 +1,4 @@
 from fastapi import Depends, FastAPI
-from src.repositories.postgres.database import init_models
 from src.dependencies import get_db
 from src.routers import users, listings
 

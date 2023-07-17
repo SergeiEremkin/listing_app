@@ -3,9 +3,11 @@ services:
   db:
     image: postgres:15.1
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+        POSTGRES_USER: 'postgres'
+        POSTGRES_PASSWORD: 'postgres'
+        POSTGRES_DATABASE: 'postgres'
+        POSTGRES_HOST: 'localhost'
+        POSTGRES_PORT: '5432'
     ports:
       - "5432:5432"
     restart: unless-stopped
@@ -14,7 +16,7 @@ services:
   web:
     build: .
     environment:
-      - SQLALCHEMY_DATABASE_URL=postgresql+asyncpg://postgres:postgres@5432:localhost/postgres
+      SQLALCHEMY_DATABASE_URL: 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
     volumes:
       - .:/listing_app
     ports:

@@ -2,7 +2,7 @@ import asyncio
 
 from fastapi import APIRouter, Depends, Request
 from src.dependencies import get_db
-from src.entities.web.listing import Listing, CreateListing
+from src.entities.web.listing import CreateListing
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from src.settings.settings import Settings

@@ -3,7 +3,7 @@ from sqlalchemy import Row, RowMapping
 
 from src.entities.web import listing
 
-from src.repositories.postgres.listing import Listing
+from src.repositories.postgres.pg_tables.listing import Listing
 from src.services.parser import image_generator, random_number
 
 

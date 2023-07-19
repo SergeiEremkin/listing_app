@@ -1,6 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from src.repositories.postgres.pg_tables.listing import Listing
 from src.entities.web.listing import CreateListing
 
 

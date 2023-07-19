@@ -1,8 +1,4 @@
-from unittest import mock
-
 import pytest
-from src.repositories.postgres.pg_tables.user import User
-
 
 
 async def test_create_user_success(async_client):
@@ -24,7 +20,6 @@ async def test_create_user_success(async_client):
     assert response["hashed_password"] == "test_password"
 
 
-
 async def test_existing_user(async_client, user):
     user_db = user
     response = await async_client.get(f"/users/{user_db.id}")
@@ -32,7 +27,6 @@ async def test_existing_user(async_client, user):
     user = response.json()
     assert user["name"] == user_db.name
     assert user["id"] == user_db.id
-
 
 
 async def test_create_user_listing_success(async_client, user):
@@ -47,8 +41,6 @@ async def test_create_user_listing_success(async_client, user):
     assert listing["title"] == "test_title"
     assert listing["description"] == "test_description"
     assert listing["user_id"] == user_db.id
-
-
 
 
 # async def test_existing_listings(async_client, listings):

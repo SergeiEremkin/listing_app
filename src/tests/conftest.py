@@ -5,7 +5,7 @@ from httpx import AsyncClient
 from sqlalchemy.orm import sessionmaker
 from src.dependencies import get_db
 from main import app
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from src.entities.web.listing import CreateListing
 from src.entities.web.user import CreateUser
 from src.repositories.postgres.database import Base

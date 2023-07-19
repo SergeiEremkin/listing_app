@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import get_db
-from src.entities.web.user import User, CreateUser
+from src.entities.web.user import CreateUser
 from src.services.users import get_users_service, create_user_service, get_user_by_id_service, get_user_by_email_service
 
 router = APIRouter(
@@ -31,4 +31,4 @@ async def read_user(user_id: int, db=Depends(get_db)):
 
 @router.get("/{email}")
 async def read_user_by_email(email: str, db=Depends(get_db)):
-    db_user = await get_user_by_email_service(db, email=email)
+    return await get_user_by_email_service(db, email=email)

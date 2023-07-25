@@ -9,6 +9,6 @@ COPY poetry.* pyproject.toml /listing_app/
 RUN poetry install
 COPY . /listing_app
 EXPOSE 8000
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
-RUN chmod +x /wait
+#ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+#RUN chmod +x /wait
 #CMD ["./docker-entrypoint.sh"]

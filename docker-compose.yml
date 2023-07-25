@@ -1,25 +1,44 @@
-version: "1.1"
+version: "3.9"
 services:
-  db:
-    image: postgres:15.1
-    environment:
-        POSTGRES_USER: 'postgres'
-        POSTGRES_PASSWORD: 'postgres'
-        POSTGRES_DB: 'postgres'
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
-    volumes:
-      - ".postgres-data:/var/lib/postgresql/data"
   web:
     build: .
     environment:
       SQLALCHEMY_DATABASE_URL: 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
-      - .:/listing_app
+      - listing_app:/home/app
     ports:
       - "8000:8000"
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:15.1
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'postgres'
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - ".postgres-data:/var/lib/postgresql/data"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "${DB_NAME}", "-U", "${DB_USER}" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+
+  alembic:
+    build: .
+    environment:
+      SQLALCHEMY_DATABASE_URL: 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
+    command: alembic upgrade head
+
+
+
+volumes:
+  listing_app:
+

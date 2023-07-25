@@ -1,4 +1,5 @@
-from src.mappers.user_mapper import users_from_orm_obj_to_pydentic_list, user_from_orm_obj_to_pydentic_list, user_by_email_from_orm_obj_to_pydentic_list
+from src.mappers.user_mapper import users_from_orm_obj_to_pydentic_list, user_from_orm_obj_to_pydentic_list, \
+    user_by_email_from_orm_obj_to_pydentic_list
 from src.mappers.user_mapper import user_from_pydentic_to_orm_obj
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession

@@ -33,4 +33,4 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 # Extend the `pyproject.toml` file in the parent directory.
 # But use a different line length.
-line-length = 160
+line-length = 120

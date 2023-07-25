@@ -10,6 +10,5 @@ class Settings(BaseSettings):
     url_site: str = 'http://allaboutfrogs.org/funstuff/randomfrog.html'
     test_db_database: str = 'postgres-test'
 
-
     class Config:
         env_file = ".env"

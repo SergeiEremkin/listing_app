@@ -1,3 +1,5 @@
+import enum
+
 from pydantic import BaseModel
 
 
@@ -10,6 +12,7 @@ class CreateListing(BaseModel):
 
 
 class Listing(CreateListing):
+    category_id: int
     id: int
     user_id: int
     url: str

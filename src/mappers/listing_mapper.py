@@ -17,7 +17,7 @@ async def listings_from_orm_obj_to_pydentic_list(orm_objects: Sequence[Row | Row
     return listings_list
 
 
-async def listing_from_pydentic_to_orm_obj(listing_validation: listing.CreateListing, user_id: int, category_id: int) -> Listing:
+async def to_db_listing(listing_validation: listing.CreateListing, user_id: int = 1, category_id: int = 1) -> Listing:
     return Listing(title=listing_validation.title,
                    description=listing_validation.description, url=await anext(image_generator()),
                    user_id=user_id, category_id=category_id)

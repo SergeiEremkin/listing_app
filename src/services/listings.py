@@ -1,4 +1,4 @@
-from src.mappers.listing_mapper import listing_from_pydentic_to_orm_obj
+from src.mappers.listing_mapper import to_db_listing
 from src.mappers.listing_mapper import listings_from_orm_obj_to_pydentic_list
 from src.mappers.listing_mapper import random_listing_from_pydentic_to_orm_obj
 from sqlalchemy import select
@@ -18,8 +18,8 @@ async def get_listings_service(session: AsyncSession, skip: int = 0, limit: int 
 
 
 async def create_user_listing_service(session: AsyncSession, listing_validation: listing.CreateListing,
-                                      user_id: int) -> Listing:
-    db_listing = await listing_from_pydentic_to_orm_obj(listing_validation, user_id=user_id)
+                                      user_id: int, category_id: int = 1) -> Listing:
+    db_listing = await to_db_listing(listing_validation, user_id=user_id, category_id=category_id)
     await add_listing(session, db_listing)
     return db_listing
 

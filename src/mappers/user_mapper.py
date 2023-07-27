@@ -27,6 +27,6 @@ async def user_by_email_from_orm_obj_to_pydentic_list(orm_object: Row | RowMappi
     return current_user
 
 
-async def user_from_pydentic_to_orm_obj(user_validation: user.CreateUser) -> User:
+async def to_db_user(user_validation: user.CreateUser) -> User:
     return User(name=user_validation.name, email=user_validation.email,
                 hashed_password=user_validation.hashed_password)

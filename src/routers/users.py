@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import get_db
 from src.entities.web.user import CreateUser
-from src.services.users import get_users_service, create_user_service, get_user_by_id_service, get_user_by_email_service
+from src.services.users import get_users_service, create_user_service, get_user_by_id_service, \
+    get_user_by_email_service, auto_create_user_service
 
 router = APIRouter(
     prefix="/users",
@@ -9,6 +10,11 @@ router = APIRouter(
     dependencies=[Depends(get_db)],
     responses={404: {"description": "Not found"}}
 )
+
+
+@router.post("/create")
+async def auto_create_user(db=Depends(get_db)):
+    return await auto_create_user_service(db)
 
 
 @router.post("/")

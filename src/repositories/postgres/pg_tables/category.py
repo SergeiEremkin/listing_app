@@ -16,9 +16,9 @@ from src.repositories.postgres.database import Base
 
 
 class Category(Base):
-    __tablename__ = "category"
-    id = Column(Integer, primary_key=True)
-    categories = Column(String)
-    subcategories = Column(String)
-    listings = relationship("Listing", back_populates="category", lazy='select')
+    __tablename__ = "categories"
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    category_name = Column(String)
+    subcategory_name = Column(String)
+
 

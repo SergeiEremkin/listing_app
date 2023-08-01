@@ -6,6 +6,7 @@ from src.routers import users, listings, category
 
 app = FastAPI(dependencies=[Depends(get_db)])
 
+
 @app.on_event("startup")
 async def on_startup():
     await init_models()
@@ -16,4 +17,4 @@ app.include_router(listings.router)
 # app.include_router(category.router)
 
 if __name__ == '__main__':
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

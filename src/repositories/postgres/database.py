@@ -25,3 +25,6 @@ async def init_models():
 
 
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+
+

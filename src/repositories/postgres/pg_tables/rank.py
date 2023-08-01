@@ -15,10 +15,11 @@ from src.repositories.postgres.database import Base
 #     new = 'Новое'
 
 
-class Category(Base):
-    __tablename__ = "categories"
+class Rank(Base):
+    __tablename__ = "ranks"
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     category_name = Column(String)
     subcategory_name = Column(String)
+    listing = relationship("Listing", back_populates='rank', lazy="select")
 
 

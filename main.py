@@ -13,7 +13,7 @@ async def on_startup():
 
 
 app.include_router(users.router)
-app.include_router(listings.router)
+# app.include_router(listings.router)
 # app.include_router(category.router)
 
 if __name__ == '__main__':

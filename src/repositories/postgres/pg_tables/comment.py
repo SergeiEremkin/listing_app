@@ -11,5 +11,4 @@ class Comment(Base):
     created_at = Column(DateTime, default=datetime.now)
     user_id = Column(Integer, ForeignKey("users.id"))
     listing_id = Column(Integer, ForeignKey("listings.id"))
-    user = relationship("User", back_populates="comments", lazy="select")
-    listing = relationship("Listing", back_populates="comments", lazy="select")
+    listing = relationship("Listing", back_populates="comment", lazy="select")

@@ -9,5 +9,5 @@ class Favorite(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     listing_id = Column(Integer, ForeignKey("listings.id"))
-    user = relationship("User", back_populates="favorites", lazy="select")
-    listing = relationship("Listing", back_populates="favorites", lazy="select")
+    user = relationship("User", back_populates="favorite", lazy="select")
+    listing = relationship("Listing", back_populates="favorite", lazy="select")

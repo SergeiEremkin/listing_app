@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from src.entities.web.listing import Listing
 
 
 class CreateUser(BaseModel):
@@ -12,3 +13,4 @@ class CreateUser(BaseModel):
 
 class User(CreateUser):
     id: int
+    listing: list[Listing]

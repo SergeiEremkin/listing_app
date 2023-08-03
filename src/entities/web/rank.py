@@ -14,7 +14,6 @@ class StateEnum(str, Enum):
 
 
 class CreateRank(BaseModel):
-    listing_id: int
     categories: RankEnum
     subcategories: StateEnum
 

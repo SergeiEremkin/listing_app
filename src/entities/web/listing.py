@@ -6,7 +6,6 @@ from pydantic import BaseModel
 class CreateListing(BaseModel):
     user_id: int
     rank_id: int
-    photo_id: int
     title: str
     description: str
     price: int

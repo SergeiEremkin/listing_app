@@ -11,3 +11,4 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     password = Column(String)
     listing = relationship("Listing", back_populates="user", lazy="select")
+    favorite = relationship("Favorite", back_populates="user", lazy="select")

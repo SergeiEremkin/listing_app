@@ -1,20 +1,18 @@
-import enum
 from datetime import datetime
+
 from pydantic import BaseModel
 
 
-class CreateListing(BaseModel):
+class CreateComment(BaseModel):
     user_id: int
-    rank_id: int
-    photo_id: int
-    title: str
+    listing_id: int
     description: str
-    price: int
+
 
     class Config:
         orm_mode = True
 
 
-class Listing(CreateListing):
+class Comment(CreateComment):
     id: int
     created_at: datetime

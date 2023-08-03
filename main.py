@@ -2,14 +2,14 @@ import uvicorn
 from fastapi import Depends, FastAPI
 from src.dependencies import get_db
 from src.repositories.postgres.database import init_models
-from src.routers import users, listings, category
+from src.routers import users, listings
 
 app = FastAPI(dependencies=[Depends(get_db)])
 
 
-# @app.on_event("startup")
-# async def on_startup():
-#     await init_models()
+@app.on_event("startup")
+async def on_startup():
+    await init_models()
 
 
 app.include_router(users.router)

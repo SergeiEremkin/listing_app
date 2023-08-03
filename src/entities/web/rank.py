@@ -2,8 +2,7 @@ from enum import Enum
 from pydantic import BaseModel
 
 
-
-class CategoriesEnum(str, Enum):
+class RankEnum(str, Enum):
     real_estate = 'Недвижимость'
     auto = 'Автомобили'
     personal_items = 'Личные вещи'
@@ -14,13 +13,15 @@ class StateEnum(str, Enum):
     new = 'Новое'
 
 
-class CreateCategory(BaseModel):
-    categories: CategoriesEnum
+class CreateRank(BaseModel):
+    listing_id: int
+    categories: RankEnum
     subcategories: StateEnum
+
 
     class Config:
         orm_mode = True
 
 
-class Category(CreateCategory):
+class Rank(CreateRank):
     id: int

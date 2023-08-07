@@ -18,8 +18,8 @@ from src.repositories.postgres.database import Base
 class Rank(Base):
     __tablename__ = "ranks"
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    category_name = Column(String)
-    subcategory_name = Column(String)
+    category = Column(String)
+    subcategory = Column(String)
     listing = relationship("Listing", back_populates='rank', lazy="select")
 
 

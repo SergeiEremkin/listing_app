@@ -11,14 +11,14 @@ router = APIRouter(
 )
 
 
-@router.post("/create")
+@router.post("/auto_create")
 async def auto_create_user(db=Depends(get_db)):
     return await auto_create_user_service(db)
 
 
-@router.post("/")
-async def create_user(user_validation: CreateUser, db=Depends(get_db)):
-    return await create_user_service(db, user_validation)
+@router.post("/create")
+async def create_user(user_db: CreateUser, db=Depends(get_db)):
+    return await create_user_service(db, user_db)
 
 
 # @router.get("/")

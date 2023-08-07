@@ -35,30 +35,5 @@ async def create_user_service(session: AsyncSession, web_user: user.CreateUser) 
 
 
 async def auto_create_user_service(session: AsyncSession):
-
-
-    # listing_validation_1 = CreateListing(title="title_1", description="description_1")
-    # listing_validation_2 = CreateListing(title="title_2", description="description_2")
-    # listing_validation_3 = CreateListing(title="title_3", description="description_3")
-
-    user_validation_1 = CreateUser(name="User_1", email="1@email.ru", password="password_1")
-    user_validation_2 = CreateUser(name="User_2", email="2@email.ru", password="password_2")
-    user_validation_3 = CreateUser(name="User_3", email="3@email.ru", password="password_3")
-
-    db_user_1 = await user_to_db(user_validation_1)
-    db_user_2 = await user_to_db(user_validation_2)
-    db_user_3 = await user_to_db(user_validation_3)
-
-    # db_listing_1 = await to_db_listing(listing_validation_1, 1, 1)
-    # db_listing_2 = await to_db_listing(listing_validation_2, 2, 2)
-    # db_listing_3 = await to_db_listing(listing_validation_3, 3, 3)
-
-    await add_user(session, db_user_1)
-    await add_user(session, db_user_2)
-    await add_user(session, db_user_3)
-
-    # await add_listing(session, db_listing_1)
-    # await add_listing(session, db_listing_2)
-    # await add_listing(session, db_listing_3)
-
-    return user_validation_1, user_validation_2, user_validation_3
+    for i in range(1, 11):
+        await add_user(session, User(name=f"User_{i}", email=f"{i}@email.ru", password=f"password_{i}"))

@@ -1,5 +1,4 @@
 from sqlalchemy import select
-
 from src.mappers.listing_mapper import listing_to_db, listing_to_web
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.repositories.postgres.listing import add_listing

@@ -4,8 +4,6 @@ from pydantic import BaseModel
 
 
 class CreateComment(BaseModel):
-    user_id: int
-    listing_id: int
     description: str
 
 

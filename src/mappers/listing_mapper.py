@@ -1,7 +1,9 @@
 # from typing import Sequence, Any
 # from sqlalchemy import Row, RowMapping
 #
-from src.entities.web.listing import CreateListing
+from sqlalchemy import Row, RowMapping
+
+from src.entities.web import listing
 from src.repositories.postgres.pg_tables import Listing
 
 
@@ -20,12 +22,19 @@ from src.repositories.postgres.pg_tables import Listing
 #     return listings_list
 
 
-async def listing_to_db(web_listing: CreateListing, user_id: int, rank_id: int) -> Listing:
+async def listing_to_db(web_listing: listing.CreateListing, user_id: int, rank_id: int) -> Listing:
     return Listing(title=web_listing.title,
-                   description=web_listing.description, price=web_listing.price, rank_id=rank_id,
+                   description=web_listing.description,
+                   price=web_listing.price,
+                   rank_id=rank_id,
                    user_id=user_id)
 
-# async def random_listing_from_pydentic_to_orm_obj(user_id: int = 1) -> Listing:
-#     return Listing(title=f'title{await random_number()}',
-#                    description=f'description{await random_number()}',
-#                    url=await anext(image_generator()), user_id=user_id)
+
+async def listing_to_web(listing_db: Row | RowMapping) -> listing.Listing:
+    return listing.Listing(id=listing_db.id,
+                           user_id=listing_db.user_id,
+                           rank_id=listing_db.rank_id,
+                           created_at=listing_db.created_at,
+                           title=listing_db.title,
+                           description=listing_db.description,
+                           price=listing_db.price)

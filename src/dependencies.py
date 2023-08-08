@@ -1,5 +1,4 @@
 from typing import AsyncGenerator
-
 from src.repositories.postgres.database import SessionLocal
 
 

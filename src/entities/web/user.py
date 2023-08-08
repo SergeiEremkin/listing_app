@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from src.entities.web.listing import Listing
 
 
 class CreateUser(BaseModel):
     name: str
-    email: str
+    email: EmailStr
     password: str
 
     class Config:

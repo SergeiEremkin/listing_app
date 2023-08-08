@@ -1,9 +1,9 @@
 from pydantic import BaseModel
+from src.services.parser import image_generator
 
 
 class CreatePhoto(BaseModel):
     photo_link: str
-    listing_id: int
 
     class Config:
         orm_mode = True
@@ -11,3 +11,4 @@ class CreatePhoto(BaseModel):
 
 class Photo(CreatePhoto):
     id: int
+    listing_id: int

@@ -4,7 +4,8 @@ from src.entities.web.listing import CreateListing
 from src.entities.web.rank import CreateRank
 from src.services.ranks import create_rank_service
 from src.settings.settings import Settings
-from src.services.listings import create_user_listing_service, get_listing_by_user_id_service, get_listings_service
+from src.services.listings import create_user_listing_service, get_listing_by_user_id_service, get_listings_service, \
+    delete_user_listing_service
 
 settings = Settings()
 
@@ -30,3 +31,8 @@ async def get_user_listings(user_id: int, db=Depends(get_db)):
 @router.get("/")
 async def get_listings(db=Depends(get_db)):
     return await get_listings_service(db)
+
+
+@router.post("/delete/{user_id}/{listing_id}")
+async def delete_listing_for_user(user_id: int, listing_id: int, db=Depends(get_db)):
+    return await delete_user_listing_service(db, user_id, listing_id)

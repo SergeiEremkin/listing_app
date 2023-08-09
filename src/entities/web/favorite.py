@@ -2,8 +2,7 @@ from pydantic import BaseModel
 
 
 class CreateFavorite(BaseModel):
-    user_id: int
-    listing_id: int
+    pass
 
     class Config:
         orm_mode = True
@@ -11,3 +10,5 @@ class CreateFavorite(BaseModel):
 
 class Favorite(CreateFavorite):
     id: int
+    user_id: int
+    listing_id: int

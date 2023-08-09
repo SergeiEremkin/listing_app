@@ -1,7 +1,8 @@
+from fastapi import HTTPException
 from sqlalchemy import select
 from src.mappers.listing_mapper import listing_to_db, listing_to_web
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.repositories.postgres.listing import add_listing
+from src.repositories.postgres.listing import add_listing, delete_listing
 from src.repositories.postgres.pg_tables.listing import Listing
 from src.entities.web import listing
 from src.settings import Settings
@@ -19,6 +20,16 @@ async def create_user_listing_service(session: AsyncSession, web_listing: listin
     db_listing = await listing_to_db(web_listing, user_id=user_id, rank_id=rank_id)
     await add_listing(session, db_listing)
     return db_listing
+
+
+async def delete_user_listing_service(session: AsyncSession,
+                                      user_id: int, listing_id: int) -> dict[str, bool]:
+    db_listing = await session.execute(
+        select(Listing).where(Listing.user_id == user_id).where(Listing.id == listing_id))
+    if not db_listing:
+        raise HTTPException(status_code=404, detail="Listing not found")
+    await delete_listing(session, db_listing.scalar())
+    return {"ok": True}
 
 
 async def get_listing_by_user_id_service(session: AsyncSession, user_id: int) -> listing.Listing:

@@ -36,3 +36,5 @@ async def get_listings(db=Depends(get_db)):
 @router.post("/delete/{user_id}/{listing_id}")
 async def delete_listing_for_user(user_id: int, listing_id: int, db=Depends(get_db)):
     return await delete_user_listing_service(db, user_id, listing_id)
+
+

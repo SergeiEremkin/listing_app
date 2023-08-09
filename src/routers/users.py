@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import get_db
 from src.entities.web.user import CreateUser
-from src.services.users import create_user_service, auto_create_user_service
+from src.services.users import create_user_service, auto_create_user_service, delete_user_service
 
 router = APIRouter(
     prefix="/users",
@@ -19,6 +19,11 @@ async def auto_create_user(db=Depends(get_db)):
 @router.post("/create")
 async def create_user(user_db: CreateUser, db=Depends(get_db)):
     return await create_user_service(db, user_db)
+
+
+@router.post("/delete/{user_id}")
+async def delete_user_account(user_id: int, db=Depends(get_db)):
+    return await delete_user_service(db, user_id)
 
 
 # @router.get("/")

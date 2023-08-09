@@ -1,3 +1,4 @@
+import asyncio
 from random import randint
 from typing import AsyncGenerator
 import httpx
@@ -32,5 +33,13 @@ async def random_number() -> int:
     return randint(MIN_NUM, MAX_NUM)
 
 
+async def main():
+    gen = image_generator()
+    awaitable = anext(gen)
+    result = await awaitable
+    print(result)
+
+
 if __name__ == '__main__':
+    # asyncio.run(main())
     pass

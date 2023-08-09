@@ -1,11 +1,19 @@
+from datetime import datetime
 from fastapi import HTTPException
 from sqlalchemy import select
 from src.mappers.listing_mapper import listing_to_db, listing_to_web
 from sqlalchemy.ext.asyncio import AsyncSession
+from src.repositories.postgres.photo import add_photo
+from src.repositories.postgres.rank import add_rank
 from src.repositories.postgres.listing import add_listing, delete_listing
 from src.repositories.postgres.pg_tables.listing import Listing
+from src.repositories.postgres.pg_tables.rank import Rank
 from src.entities.web import listing
+from random import randint, choice
+
+from src.services.photos import auto_create_photo
 from src.settings import Settings
+
 
 settings = Settings()
 
@@ -36,7 +44,20 @@ async def get_listing_by_user_id_service(session: AsyncSession, user_id: int) ->
     db_listings = await session.execute(select(Listing).where(Listing.user_id == user_id))
     return await listing_to_web(db_listings.scalar())
 
-# async def create_random_user_listing_service(session: AsyncSession, user_id: int) -> Listing:
-#     db_listing = await random_listing_from_pydentic_to_orm_obj(user_id=user_id)
-#     await add_listing(session, d\b_listing)
-#     return db_listing
+
+async def auto_create_listings(session: AsyncSession) -> dict[str: True]:
+    await add_rank(session, Rank(category="Недвижимость", subcategory="Новое"))
+    await add_rank(session, Rank(category="Личные вещи", subcategory="Б/у"))
+    ranks_id = await session.execute(select(Rank.id))
+    ranks_id = ranks_id.scalars().all()
+    for i in range(1, 11):
+        random_user_id = randint(1, 10)
+        await add_listing(session, Listing(title=f"title{i}", created_at=datetime.now(), description=f"description{i}", price=i * 1000,
+                                           rank_id=choice(ranks_id),
+                                           user_id=random_user_id))
+    listings_id = await session.execute(select(Listing.id))
+    listings_id = listings_id.scalars().all()
+    await auto_create_photo(session, choice(listings_id))
+    await auto_create_photo(session, choice(listings_id))
+    await auto_create_photo(session, choice(listings_id))
+    return {"ok": True}

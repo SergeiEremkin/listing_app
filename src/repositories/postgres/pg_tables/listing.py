@@ -10,7 +10,7 @@ class Listing(Base):
     description = Column(String, index=True)
     price = Column(Integer)
     created_at = Column(DateTime, default=datetime.now)
-    rank_id = Column(Integer, ForeignKey("ranks.id"), unique=True, )
+    rank_id = Column(Integer, ForeignKey("ranks.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="listing", lazy='select')
     rank = relationship("Rank", back_populates="listing", cascade="all, delete", lazy="select")

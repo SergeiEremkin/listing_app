@@ -1,3 +1,6 @@
+from fastapi import HTTPException
+from sqlalchemy import select
+
 from src.entities.web.listing import CreateListing
 from src.entities.web.user import CreateUser
 #from src.mappers.listing_mapper import to_db_listing
@@ -9,7 +12,7 @@ from sqlalchemy.orm import selectinload
 from src.repositories.postgres.listing import add_listing
 from src.repositories.postgres.pg_tables.user import User
 from src.entities.web import user
-from src.repositories.postgres.users import add_user
+from src.repositories.postgres.users import add_user, delete_user
 
 
 # async def get_user_by_id_service(session: AsyncSession, user_id: int) -> user.User:
@@ -32,6 +35,14 @@ async def create_user_service(session: AsyncSession, web_user: user.CreateUser) 
     db_user = await user_to_db(web_user)
     await add_user(session, db_user)
     return db_user
+
+
+async def delete_user_service(session: AsyncSession, user_id: int) -> dict[str: bool]:
+    db_user = await session.execute(select(User).where(User.id == user_id))
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    await delete_user(session, db_user.scalar())
+    return {"ok": True}
 
 
 async def auto_create_user_service(session: AsyncSession):

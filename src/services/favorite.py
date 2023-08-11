@@ -1,7 +1,5 @@
-from src.entities.web.favorite import CreateFavorite
-from src.mappers.favorite_mapper import favorite_to_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.repositories.postgres.pg_tables import Favorite
+from src.repositories.postgres.pg_tables.favorite import Favorite
 from src.repositories.postgres.favorite import add_favorite
 
 

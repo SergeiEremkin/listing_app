@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from src.services.parser import image_generator
 
 
 class CreatePhoto(BaseModel):

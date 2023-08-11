@@ -1,4 +1,3 @@
-from src.entities.web.favorite import CreateFavorite
 from src.repositories.postgres.pg_tables import Favorite
 
 

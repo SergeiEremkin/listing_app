@@ -1,4 +1,3 @@
-import asyncio
 from random import randint
 from typing import AsyncGenerator
 import httpx

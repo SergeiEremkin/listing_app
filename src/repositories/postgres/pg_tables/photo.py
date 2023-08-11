@@ -1,5 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
-from datetime import datetime
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from src.repositories.postgres.database import Base
 

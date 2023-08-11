@@ -12,3 +12,4 @@ class User(Base):
     password = Column(String)
     listing = relationship("Listing", back_populates="user", cascade="all, delete", lazy="select")
     favorite = relationship("Favorite", back_populates="user", cascade="all, delete", lazy="select")
+    comment = relationship("Comment", back_populates="user", cascade="all, delete", lazy="select")

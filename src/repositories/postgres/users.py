@@ -10,3 +10,5 @@ async def add_user(session: AsyncSession, db_user: User):
 async def delete_user(session: AsyncSession, db_user: User):
     await session.delete(db_user)
     await session.commit()
+
+

@@ -1,5 +1,5 @@
 from src.entities.web.comment import CreateComment
-from src.repositories.postgres.pg_tables import Comment
+from src.repositories.postgres.pg_tables.comment import Comment
 
 
 async def comment_to_db(web_comment: CreateComment, listing_id: int, user_id: int) -> Comment:

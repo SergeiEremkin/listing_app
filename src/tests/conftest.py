@@ -2,10 +2,9 @@ import asyncio
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient
-from sqlalchemy.orm import sessionmaker
 from src.dependencies import get_db
 from main import app
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from src.entities.web.listing import CreateListing
 from src.entities.web.user import CreateUser
 from src.repositories.postgres.database import Base
@@ -18,11 +17,11 @@ from src.settings import Settings
 settings = Settings()
 
 TEST_SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://" \
-                               f"{settings.db_username}:" \
-                               f"{settings.db_password}@" \
-                               f"{settings.db_host}:" \
-                               f"{settings.db_port}/" \
-                               f"{settings.test_db_database}"
+                               f"{settings.DB_USERNAME}:" \
+                               f"{settings.DB_PASSWORD}@" \
+                               f"{settings.DB_HOST}:" \
+                               f"{settings.DB_PORT}/" \
+                               f"{settings.TEST_DB_DATABASE}"
 
 
 @pytest.fixture(scope="session")
@@ -56,7 +55,7 @@ async def db_session(engine) -> AsyncSession:
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.drop_all)
         await connection.run_sync(Base.metadata.create_all)
-        TestingSessionLocal = sessionmaker(
+        TestingSessionLocal = async_sessionmaker(
             expire_on_commit=False,
             class_=AsyncSession,
             bind=engine,
@@ -82,7 +81,7 @@ async def async_client(override_get_db):
 
 @pytest_asyncio.fixture
 async def user(db_session: AsyncSession) -> user.User:
-    user = CreateUser(email="nanny_ogg@lancre.com", name="Gytha Ogg", hashed_password="12345678")
+    user = CreateUser(email="nanny_ogg@lancre.com", name="Gytha Ogg", password="12345678")
     user_db = await create_user_service(db_session, user)
     yield user_db
     await db_session.delete(user_db)

@@ -5,11 +5,11 @@ from src.settings import Settings
 settings = Settings()
 
 SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://" \
-                          f"{settings.db_username}:" \
-                          f"{settings.db_password}@" \
-                          f"{settings.db_host}:" \
-                          f"{settings.db_port}/" \
-                          f"{settings.db_database}"
+                          f"{settings.DB_USERNAME}:" \
+                          f"{settings.DB_PASSWORD}@" \
+                          f"{settings.DB_HOST}:" \
+                          f"{settings.DB_PORT}/" \
+                          f"{settings.DB_DATABASE}"
 
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL, echo=True
@@ -24,8 +24,4 @@ async def init_models():
         await conn.run_sync(Base.metadata.create_all)
 
 
-
 SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-
-

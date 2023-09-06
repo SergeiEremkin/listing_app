@@ -15,11 +15,11 @@ async def on_startup():
     await init_models()
 
 
-@app.post("/")
-async def create_base_objects(db=Depends(get_db)):
-    await auto_create_user_service(db)
-    await auto_create_listings(db)
-    return {"user_create": True}
+#@app.post("/")
+#async def create_base_objects(db=Depends(get_db)):
+ #   await auto_create_user_service(db)
+  #  await auto_create_listings(db)
+   # return {"user_create": True}
 
 
 app.include_router(users.router)

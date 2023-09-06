@@ -2,13 +2,13 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    db_username: str = 'postgres'
-    db_password: str = 'postgres'
-    db_database: str = 'postgres'
-    db_host: str = 'localhost'
-    db_port: int = 5432
+    DB_USERNAME: str = 'postgres'
+    DB_PASSWORD: str = 'postgres'
+    DB_DATABASE: str = 'postgres'
+    DB_HOST: str = 'localhost'
+    DB_PORT: int = 5432
+    TEST_DB_DATABASE: str = 'postgres-test'
     url_site: str = 'http://allaboutfrogs.org/funstuff/randomfrog.html'
-    test_db_database: str = 'postgres-test'
 
     class Config:
         env_file = ".env"
